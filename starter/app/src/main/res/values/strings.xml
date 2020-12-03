@@ -16,5 +16,5 @@
     <string name="retrofit_radio_button">Retrofit - Type-safe HTTP client for Android and Java by Square, Inc</string>
     <string name="download">Download</string>
     <string name="select_file_for_download">Please select the file to download</string>
-    <string name="download_complete">Completed</string>
+    <string name="download_complete">Download complete</string>
 </resources>

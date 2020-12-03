@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import kotlinx.android.synthetic.main.activity_main.*
@@ -43,8 +44,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun download() {
+        val url = getUrl()
+        if (url.isEmpty()) {
+            Toast.makeText(this, getString(R.string.select_file_for_download), Toast.LENGTH_LONG).show()
+            return
+        }
+
         val request =
-                DownloadManager.Request(Uri.parse(getUrl()))
+                DownloadManager.Request(Uri.parse(url))
                         .setTitle(getString(R.string.app_name))
                         .setDescription(getString(R.string.app_description))
                         .setRequiresCharging(false)
@@ -60,13 +67,12 @@ class MainActivity : AppCompatActivity() {
         return when (download_radio_group.checkedRadioButtonId) {
             R.id.glide_radio_button -> "https://github.com/bumptech/glide"
             R.id.loadapp_radio_button -> "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
-            else -> "https://github.com/square/retrofit"
+            R.id.retrofit_radio_button -> "https://github.com/square/retrofit"
+            else -> ""
         }
     }
 
     companion object {
-        private const val URL =
-                "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
         private const val CHANNEL_ID = "channelId"
     }
 

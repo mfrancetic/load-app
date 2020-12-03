@@ -17,4 +17,8 @@
     <string name="download">Download</string>
     <string name="select_file_for_download">Please select the file to download</string>
     <string name="download_complete">Download complete</string>
+    <string name="file_name">File name:</string>
+    <string name="status">Status:</string>
+    <string name="ok">OK</string>
+    <string name="fab_content_description_return_to_main_activity">Return to the MainActivity</string>
 </resources>

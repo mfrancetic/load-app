@@ -4,8 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/default_padding"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".DetailActivity"
     tools:showIn="@layout/activity_detail">
+
+    <TextView
+        android:id="@+id/file_name_label"
+        style="@style/LabelTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_padding"
+        android:text="@string/file_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/file_name"
+        style="@style/ValueTextViewStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="false"
+        app:layout_constraintStart_toEndOf="@id/file_name_label"
+        app:layout_constraintTop_toTopOf="@id/file_name_label"
+        tools:text="Retrofit - Type-safe HTTP client for Android and Java by Square, Inc." />
+
+    <TextView
+        android:id="@+id/status_label"
+        style="@style/LabelTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_padding"
+        android:text="@string/status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/file_name" />
+
+    <TextView
+        android:id="@+id/status"
+        style="@style/ValueTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/file_name"
+        app:layout_constraintTop_toTopOf="@id/status_label"
+        tools:text="Fail" />
+
+    <Button
+        android:id="@+id/ok_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="@string/ok"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

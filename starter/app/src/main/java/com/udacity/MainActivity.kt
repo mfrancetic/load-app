@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
@@ -43,21 +44,29 @@ class MainActivity : AppCompatActivity() {
 
     private fun download() {
         val request =
-            DownloadManager.Request(Uri.parse(URL))
-                .setTitle(getString(R.string.app_name))
-                .setDescription(getString(R.string.app_description))
-                .setRequiresCharging(false)
-                .setAllowedOverMetered(true)
-                .setAllowedOverRoaming(true)
+                DownloadManager.Request(Uri.parse(getUrl()))
+                        .setTitle(getString(R.string.app_name))
+                        .setDescription(getString(R.string.app_description))
+                        .setRequiresCharging(false)
+                        .setAllowedOverMetered(true)
+                        .setAllowedOverRoaming(true)
 
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadID =
-            downloadManager.enqueue(request)// enqueue puts the download request in the queue.
+                downloadManager.enqueue(request)// enqueue puts the download request in the queue.
+    }
+
+    private fun getUrl(): String {
+        return when (download_radio_group.checkedRadioButtonId) {
+            R.id.glide_radio_button -> "https://github.com/bumptech/glide"
+            R.id.loadapp_radio_button -> "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
+            else -> "https://github.com/square/retrofit"
+        }
     }
 
     companion object {
         private const val URL =
-            "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
+                "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
         private const val CHANNEL_ID = "channelId"
     }
 

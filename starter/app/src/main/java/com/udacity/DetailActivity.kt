@@ -13,6 +13,13 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         setFileNameAndStatus()
+        setOnClickListener()
+    }
+
+    private fun setOnClickListener() {
+        ok_button.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun setFileNameAndStatus() {

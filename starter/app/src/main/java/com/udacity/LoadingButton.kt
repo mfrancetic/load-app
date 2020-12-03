@@ -1,5 +1,6 @@
 package com.udacity
 
+import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -11,20 +12,36 @@ import android.view.View
 import androidx.core.content.withStyledAttributes
 import kotlin.properties.Delegates
 
+
 class LoadingButton @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
     private var widthSize = 0
     private var heightSize = 0
 
-    private val valueAnimator = ValueAnimator()
+    private var valueAnimator = ValueAnimator()
 
     private var buttonClickedText = 0
     private var buttonLoadingText = 0
     private var buttonCompleteText = 0
 
-    private var buttonState: ButtonState by Delegates.observable(ButtonState.Completed) { property, old, new ->
-        buttonState = new
+    private var buttonState: ButtonState by Delegates.observable(ButtonState.Completed)
+    { property, old, new ->
+        when (new) {
+            //  // if ButtonState.Loading -> show "Loading" text and start the animation
+            ButtonState.Loading -> animateColorChange()
+            // // if ButtonState.Completed -> show "Completed" text and end the animation
+            ButtonState.Completed -> completeAnimation()
+        }
+        invalidate()
+    };
+
+    private fun completeAnimation() {
+        valueAnimator.end()
+    }
+
+    fun setNewButtonState(newButtonState: ButtonState) {
+        buttonState = newButtonState
     }
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -51,7 +68,11 @@ class LoadingButton @JvmOverloads constructor(
         val buttonText = when (buttonState) {
             ButtonState.Clicked -> context.getString(R.string.download)
             ButtonState.Loading -> context.getString(R.string.button_loading)
-            ButtonState.Completed -> context.getString(R.string.download)
+            ButtonState.Completed -> context.getString(R.string.download_complete)
+        }
+
+        if (buttonState != ButtonState.Loading) {
+            setBackgroundColor(context.resources.getColor(R.color.colorPrimary))
         }
 
         canvas.drawText(buttonText, widthSize / 2f, heightSize / 1.7f, paint)
@@ -68,5 +89,16 @@ class LoadingButton @JvmOverloads constructor(
         widthSize = w
         heightSize = h
         setMeasuredDimension(w, h)
+    }
+
+    private fun animateColorChange() {
+        val colorFrom = resources.getColor(R.color.colorPrimary)
+        val colorTo = resources.getColor(R.color.colorPrimaryDark)
+        valueAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo)
+
+        valueAnimator.addUpdateListener { animator ->
+            setBackgroundColor(animator.animatedValue as Int)
+        }
+        valueAnimator.start()
     }
 }

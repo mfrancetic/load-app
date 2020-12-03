@@ -12,9 +12,16 @@ private val FLAGS = 0
 
 const val CHANNEL_ID = "channelId"
 const val CHANNEL_NAME = "channelName"
+const val FILE_NAME = "fileName"
+const val STATUS = "status"
 
-fun NotificationManager.sendNotification(applicationContext: Context) {
+fun NotificationManager.sendNotification(
+    applicationContext: Context, fileName: String,
+    status: String
+) {
     val contentIntent = Intent(applicationContext, DetailActivity::class.java)
+    contentIntent.putExtra(FILE_NAME, fileName)
+    contentIntent.putExtra(STATUS, status)
 
     val contentPendingIntent = PendingIntent.getActivity(
         applicationContext,
@@ -42,4 +49,9 @@ fun NotificationManager.sendNotification(applicationContext: Context) {
         .setAutoCancel(true)
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
     notify(NOTIFICATION_ID, builder.build())
+}
+
+enum class DownloadStatus(val status: String) {
+    SUCCESS("Success"),
+    FAILURE("Fail")
 }

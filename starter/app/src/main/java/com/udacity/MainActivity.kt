@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -51,19 +52,33 @@ class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+            var status = DownloadStatus.FAILURE
             if (id == downloadID && intent.action == DownloadManager.ACTION_DOWNLOAD_COMPLETE) {
-                setButtonState(ButtonState.Completed)
-                sendNotification()
+                val query = DownloadManager.Query()
+                query.setFilterById(intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0))
+                val manager = context!!.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+                val cursor: Cursor = manager.query(query)
+                if (cursor.moveToFirst()) {
+                    if (cursor.count > 0) {
+                        val statusInt: Int =
+                            cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                        if (statusInt == DownloadManager.STATUS_SUCCESSFUL) {
+                            status = DownloadStatus.SUCCESS
+                        }
+                    }
+                }
             }
+            setButtonState(ButtonState.Completed)
+            sendNotification(getFileName(), status.status)
         }
     }
 
-    private fun sendNotification() {
+    private fun sendNotification(fileName: String, status: String) {
         val notificationManager = ContextCompat.getSystemService(
             context,
             NotificationManager::class.java
         ) as NotificationManager
-        notificationManager.sendNotification(context)
+        notificationManager.sendNotification(context, fileName, status)
     }
 
     private fun download() {
@@ -93,6 +108,15 @@ class MainActivity : AppCompatActivity() {
             R.id.glide_radio_button -> "https://github.com/bumptech/glide/archive/master.zip"
             R.id.loadapp_radio_button -> "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
             R.id.retrofit_radio_button -> "https://github.com/square/retrofit/archive/master.zip"
+            else -> ""
+        }
+    }
+
+    private fun getFileName(): String {
+        return when (download_radio_group.checkedRadioButtonId) {
+            R.id.glide_radio_button -> getString(R.string.glide_radio_button)
+            R.id.loadapp_radio_button -> getString(R.string.loadapp_radio_button)
+            R.id.retrofit_radio_button -> getString(R.string.retrofit_radio_button)
             else -> ""
         }
     }

@@ -10,7 +10,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
 
-private const val START_ANGLE = 225f
+private const val START_ANGLE = 30f
 
 private class Arc(val start: Float, val sweep: Float, val color: Int)
 
@@ -40,7 +40,7 @@ class IndicatorView @JvmOverloads constructor(
         arcs = if (colors.isEmpty()) {
             listOf(Arc(0f, 360f, android.R.color.darker_gray))
         } else {
-            val sweepSize: Float = 360f / colors.size
+            val sweepSize = 360f
             colors.mapIndexed { index, _ ->
                 val startAngle = index * sweepSize
                 Arc(start = startAngle, sweep = sweepSize, color = Color.YELLOW)
@@ -63,7 +63,7 @@ class IndicatorView @JvmOverloads constructor(
     private fun startAnimation() {
         animator?.cancel()
         animator = ValueAnimator.ofInt(0, 360).apply {
-            duration = 650
+            duration = 5000
             interpolator = LinearInterpolator()
             addUpdateListener { valueAnimator ->
                 currentSweepAngle = valueAnimator.animatedValue as Int
@@ -86,7 +86,7 @@ class IndicatorView @JvmOverloads constructor(
                 if (currentSweepAngle > arc.start) {
                     paint.color = arc.color
                     canvas.drawArc(rect,
-                            START_ANGLE + arc.start,
+                            START_ANGLE,
                             currentSweepAngle - arc.start,
                             true,
                             paint)

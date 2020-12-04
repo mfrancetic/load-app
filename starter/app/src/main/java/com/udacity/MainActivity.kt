@@ -12,6 +12,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -40,8 +41,9 @@ class MainActivity : AppCompatActivity() {
         createChannel()
     }
 
-    private fun setColorForLoadingIndicator() {
-        loading_indicator.colors = listOf(Color.YELLOW)
+    private fun setColorForLoadingIndicator(color: Int) {
+        loading_indicator.visibility = View.VISIBLE
+        loading_indicator.colors = listOf(color)
     }
 
     private fun setButtonState(buttonState: ButtonState) {
@@ -50,6 +52,8 @@ class MainActivity : AppCompatActivity() {
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
+            loading_indicator.visibility = View.INVISIBLE
+
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             var status = DownloadStatus.FAILURE
             if (id == downloadID && intent.action == DownloadManager.ACTION_DOWNLOAD_COMPLETE) {
@@ -81,14 +85,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun download() {
-        setColorForLoadingIndicator()
-
         val url = getUrl()
         if (url.isEmpty()) {
             Toast.makeText(this, getString(R.string.select_file_for_download), Toast.LENGTH_LONG)
                     .show()
             return
         }
+        setColorForLoadingIndicator(Color.YELLOW)
 
         val request =
                 DownloadManager.Request(Uri.parse(url))

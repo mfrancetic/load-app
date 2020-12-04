@@ -10,6 +10,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.withStyledAttributes
+import kotlinx.android.synthetic.main.content_main.view.*
 import kotlin.properties.Delegates
 
 
@@ -71,7 +72,7 @@ class LoadingButton @JvmOverloads constructor(
         val buttonText = when (buttonState) {
             ButtonState.Clicked -> context.getString(R.string.download)
             ButtonState.Loading -> context.getString(R.string.button_loading)
-            ButtonState.Completed -> context.getString(R.string.download_complete)
+            ButtonState.Completed -> context.getString(R.string.download)
         }
 
         if (buttonState != ButtonState.Loading) {

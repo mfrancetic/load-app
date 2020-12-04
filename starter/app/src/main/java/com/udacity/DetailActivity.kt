@@ -1,5 +1,7 @@
 package com.udacity
 
+import android.graphics.Color
+import android.graphics.Color.red
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
@@ -63,7 +65,13 @@ class DetailActivity : AppCompatActivity() {
         val fileName = intent.getStringExtra(FILE_NAME)
         val statusText = intent.getStringExtra(STATUS)
 
-        file_name?.text = fileName
-        status?.text = statusText
+        file_name.text = fileName
+        status.text = statusText
+
+        if (statusText.equals(getString(R.string.success))) {
+            status.setTextColor(Color.BLACK)
+        } else {
+            status.setTextColor(Color.RED)
+        }
     }
 }

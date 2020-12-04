@@ -3,18 +3,17 @@ package com.udacity
 import android.app.DownloadManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.Cursor
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -23,10 +22,6 @@ import kotlinx.android.synthetic.main.content_main.*
 class MainActivity : AppCompatActivity() {
 
     private var downloadID: Long = 0
-
-    private lateinit var notificationManager: NotificationManager
-    private lateinit var pendingIntent: PendingIntent
-    private lateinit var action: NotificationCompat.Action
     private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +40,10 @@ class MainActivity : AppCompatActivity() {
         createChannel()
     }
 
+    private fun setColorForLoadingIndicator() {
+        loading_indicator.colors = listOf(Color.YELLOW)
+    }
+
     private fun setButtonState(buttonState: ButtonState) {
         custom_button.setNewButtonState(buttonState)
     }
@@ -61,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 if (cursor.moveToFirst()) {
                     if (cursor.count > 0) {
                         val statusInt: Int =
-                            cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                                cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
                         if (statusInt == DownloadManager.STATUS_SUCCESSFUL) {
                             status = DownloadStatus.SUCCESS
                         }
@@ -75,32 +74,33 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendNotification(fileName: String, status: String) {
         val notificationManager = ContextCompat.getSystemService(
-            context,
-            NotificationManager::class.java
+                context,
+                NotificationManager::class.java
         ) as NotificationManager
         notificationManager.sendNotification(context, fileName, status)
     }
 
     private fun download() {
+        setColorForLoadingIndicator()
 
         val url = getUrl()
         if (url.isEmpty()) {
             Toast.makeText(this, getString(R.string.select_file_for_download), Toast.LENGTH_LONG)
-                .show()
+                    .show()
             return
         }
 
         val request =
-            DownloadManager.Request(Uri.parse(url))
-                .setTitle(getString(R.string.app_name))
-                .setDescription(getString(R.string.app_description))
-                .setRequiresCharging(false)
-                .setAllowedOverMetered(true)
-                .setAllowedOverRoaming(true)
+                DownloadManager.Request(Uri.parse(url))
+                        .setTitle(getString(R.string.app_name))
+                        .setDescription(getString(R.string.app_description))
+                        .setRequiresCharging(false)
+                        .setAllowedOverMetered(true)
+                        .setAllowedOverRoaming(true)
 
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadID =
-            downloadManager.enqueue(request)// enqueue puts the download request in the queue.
+                downloadManager.enqueue(request)// enqueue puts the download request in the queue.
     }
 
     private fun getUrl(): String {
@@ -125,9 +125,9 @@ class MainActivity : AppCompatActivity() {
         // Channels are available from api level 26.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT
             )
 
             notificationChannel.enableLights(true)
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
             notificationChannel.description = getString(R.string.download_complete)
 
             val notificationManager = context.getSystemService(
-                NotificationManager::class.java
+                    NotificationManager::class.java
             )
             notificationManager.createNotificationChannel(notificationChannel)
         }

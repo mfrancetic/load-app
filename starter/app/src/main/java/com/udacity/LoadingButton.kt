@@ -29,7 +29,9 @@ class LoadingButton @JvmOverloads constructor(
     { property, old, new ->
         when (new) {
             //  // if ButtonState.Loading -> show "Loading" text and start the animation
-            ButtonState.Loading -> animateColorChange()
+            ButtonState.Loading -> {
+                animateColorChange()
+            }
             // // if ButtonState.Completed -> show "Completed" text and end the animation
             ButtonState.Completed -> completeAnimation()
         }
@@ -55,6 +57,7 @@ class LoadingButton @JvmOverloads constructor(
 
     init {
         isClickable = true
+        buttonState = ButtonState.Clicked
         context.withStyledAttributes(attrs, R.styleable.LoadingButton) {
             buttonClickedText = getInt(R.styleable.LoadingButton_buttonClickedText, 0)
             buttonLoadingText = getInt(R.styleable.LoadingButton_buttonLoadingText, 0)

@@ -114,5 +114,6 @@
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
+        app:autoTransition="animateToEnd"
         app:duration="3000" />
 </MotionScene>

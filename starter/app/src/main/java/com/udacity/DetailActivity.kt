@@ -1,7 +1,6 @@
 package com.udacity
 
 import android.graphics.Color
-import android.graphics.Color.red
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
@@ -15,6 +14,7 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
         setSupportActionBar(toolbar)
 
+        cancelAllNotifications(this)
         setFileNameAndStatus()
         setOnClickListener()
         startTransition()

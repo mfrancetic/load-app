@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 
 private val NOTIFICATION_ID = 0
 private val REQUEST_CODE = 0
@@ -49,6 +50,14 @@ fun NotificationManager.sendNotification(
         .setAutoCancel(true)
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
     notify(NOTIFICATION_ID, builder.build())
+}
+
+fun cancelAllNotifications(context: Context) {
+    val notificationManager = ContextCompat.getSystemService(
+        context,
+        NotificationManager::class.java
+    ) as NotificationManager
+    notificationManager.cancelAll()
 }
 
 enum class DownloadStatus(val status: String) {

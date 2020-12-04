@@ -71,10 +71,13 @@
             style="@style/ValueTextViewStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_padding"
             android:ellipsize="end"
             android:singleLine="false"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/file_name_label"
-            app:layout_constraintTop_toTopOf="@id/file_name_label" />
+            app:layout_constraintTop_toTopOf="@id/file_name_label"
+            tools:text="Retrofit - Type-safe HTTP client for Android and Java by Square, Inc." />
 
         <Constraint
             android:id="@+id/status_label"

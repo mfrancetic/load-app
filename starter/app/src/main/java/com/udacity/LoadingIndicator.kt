@@ -1,6 +1,7 @@
 package com.udacity
 
 import android.animation.ValueAnimator
+import android.animation.ValueAnimator.INFINITE
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -29,6 +30,11 @@ class IndicatorView @JvmOverloads constructor(
                 computeArcs()
             }
         }
+
+    fun stopLoadingAnimation() {
+        arcs = emptyList()
+        animator?.cancel()
+    }
 
     private var animator: ValueAnimator? = null
     private var currentSweepAngle = 0
@@ -63,7 +69,9 @@ class IndicatorView @JvmOverloads constructor(
     private fun startAnimation() {
         animator?.cancel()
         animator = ValueAnimator.ofInt(0, 360).apply {
-            duration = 5000
+            repeatMode = ValueAnimator.RESTART
+            repeatCount = INFINITE
+            duration = 2000
             interpolator = LinearInterpolator()
             addUpdateListener { valueAnimator ->
                 currentSweepAngle = valueAnimator.animatedValue as Int

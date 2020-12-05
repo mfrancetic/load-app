@@ -41,9 +41,14 @@ class MainActivity : AppCompatActivity() {
         createChannel()
     }
 
-    private fun setColorForLoadingIndicator(color: Int) {
-        loading_indicator.visibility = View.VISIBLE
-        loading_indicator.colors = listOf(color)
+    private fun setLoadingIndicatorVisibilityAndColor(visible: Boolean) {
+        if (visible) {
+            loading_indicator.visibility = View.VISIBLE
+            loading_indicator.colors = listOf(Color.YELLOW)
+        } else {
+            loading_indicator.visibility = View.INVISIBLE
+            loading_indicator.stopLoadingAnimation()
+        }
     }
 
     private fun setButtonState(buttonState: ButtonState) {
@@ -52,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            loading_indicator.visibility = View.INVISIBLE
+            setLoadingIndicatorVisibilityAndColor(false)
 
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             var status = DownloadStatus.FAILURE
@@ -91,7 +96,9 @@ class MainActivity : AppCompatActivity() {
                     .show()
             return
         }
-        setColorForLoadingIndicator(Color.YELLOW)
+
+        loading_indicator.stopLoadingAnimation()
+        setLoadingIndicatorVisibilityAndColor(true)
 
         val request =
                 DownloadManager.Request(Uri.parse(url))

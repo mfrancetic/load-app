@@ -23,7 +23,8 @@ class LoadingButton @JvmOverloads constructor(
     private var buttonClickedText = 0
     private var buttonLoadingText = 0
     private var buttonCompleteText = 0
-    private lateinit var frame: View
+    private var buttonTextColor = 0
+    private var buttonBackgroundColor = 0
     private var loadingProgress: Float = 0f
 
     private var buttonState: ButtonState by Delegates.observable(ButtonState.Completed)
@@ -53,18 +54,16 @@ class LoadingButton @JvmOverloads constructor(
         style = Paint.Style.FILL
         textAlign = Paint.Align.CENTER
         textSize = 55.0f
-        color = Color.WHITE
         typeface = Typeface.create("", Typeface.NORMAL)
     }
 
     private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = context.resources.getColor(R.color.colorPrimary)
     }
 
     private val loadingPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = context.resources.getColor(R.color.colorPrimaryDark)
+        color = context.getColor(R.color.colorPrimaryDark)
     }
 
     init {
@@ -74,6 +73,8 @@ class LoadingButton @JvmOverloads constructor(
             buttonClickedText = getInt(R.styleable.LoadingButton_buttonClickedText, 0)
             buttonLoadingText = getInt(R.styleable.LoadingButton_buttonLoadingText, 0)
             buttonCompleteText = getInt(R.styleable.LoadingButton_buttonCompletedText, 0)
+            buttonTextColor = getInt(R.styleable.LoadingButton_buttonTextColor, context.getColor(R.color.white))
+            buttonBackgroundColor = getInt(R.styleable.LoadingButton_buttonBackgroundColor, context.getColor(R.color.colorPrimary))
         }
     }
 
@@ -85,10 +86,12 @@ class LoadingButton @JvmOverloads constructor(
             ButtonState.Loading -> context.getString(R.string.button_loading)
             ButtonState.Completed -> context.getString(R.string.download)
         }
+        paint.color = buttonTextColor
+        backgroundPaint.color = buttonBackgroundColor
 
         canvas.drawRect(0f, heightSize.toFloat(), widthSize.toFloat(),
                 0f, backgroundPaint)
-        
+
         if (buttonState == ButtonState.Loading) {
             canvas.drawRect(0f, heightSize.toFloat(), widthSize.toFloat() * loadingProgress / 100,
                     0f, loadingPaint)

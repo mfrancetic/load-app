@@ -15,7 +15,7 @@ private const val START_ANGLE = 30f
 
 private class Arc(val start: Float, val sweep: Float, val color: Int)
 
-class IndicatorView @JvmOverloads constructor(
+class LoadingIndicator @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0

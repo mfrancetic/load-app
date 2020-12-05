@@ -45,18 +45,20 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_margin="20dp"
+        app:buttonBackgroundColor="@color/colorPrimary"
+        app:buttonTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.udacity.IndicatorView
+    <com.udacity.LoadingIndicator
         android:id="@+id/loading_indicator"
         android:layout_width="@dimen/loading_indicator_size"
         android:layout_height="@dimen/loading_indicator_size"
         android:layout_marginEnd="@dimen/default_padding"
         app:layout_constraintBottom_toBottomOf="@id/custom_button"
-        app:layout_constraintTop_toTopOf="@id/custom_button"
         app:layout_constraintEnd_toEndOf="@id/custom_button"
+        app:layout_constraintTop_toTopOf="@id/custom_button"
         tools:background="@color/colorPrimary" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

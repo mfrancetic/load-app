@@ -1,14 +1,12 @@
 package com.udacity
 
-import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Typeface
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import androidx.core.content.withStyledAttributes
 import kotlinx.android.synthetic.main.content_main.view.*
 import kotlin.properties.Delegates
@@ -25,18 +23,22 @@ class LoadingButton @JvmOverloads constructor(
     private var buttonClickedText = 0
     private var buttonLoadingText = 0
     private var buttonCompleteText = 0
+    private lateinit var frame: View
+    private var loadingProgress: Float = 0f
 
     private var buttonState: ButtonState by Delegates.observable(ButtonState.Completed)
     { property, old, new ->
         when (new) {
-            //  // if ButtonState.Loading -> show "Loading" text and start the animation
             ButtonState.Loading -> {
                 animateColorChange()
+                invalidate()
+
             }
-            // // if ButtonState.Completed -> show "Completed" text and end the animation
-            ButtonState.Completed -> completeAnimation()
+            ButtonState.Completed -> {
+                completeAnimation()
+                invalidate()
+            }
         }
-        invalidate()
     };
 
     private fun completeAnimation() {
@@ -50,10 +52,19 @@ class LoadingButton @JvmOverloads constructor(
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         textAlign = Paint.Align.CENTER
-        setBackgroundColor(context.resources.getColor(R.color.colorPrimary))
         textSize = 55.0f
         color = Color.WHITE
         typeface = Typeface.create("", Typeface.NORMAL)
+    }
+
+    private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = context.resources.getColor(R.color.colorPrimary)
+    }
+
+    private val loadingPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = context.resources.getColor(R.color.colorPrimaryDark)
     }
 
     init {
@@ -75,8 +86,12 @@ class LoadingButton @JvmOverloads constructor(
             ButtonState.Completed -> context.getString(R.string.download)
         }
 
-        if (buttonState != ButtonState.Loading) {
-            setBackgroundColor(context.resources.getColor(R.color.colorPrimary))
+        canvas.drawRect(0f, heightSize.toFloat(), widthSize.toFloat(),
+                0f, backgroundPaint)
+        
+        if (buttonState == ButtonState.Loading) {
+            canvas.drawRect(0f, heightSize.toFloat(), widthSize.toFloat() * loadingProgress / 100,
+                    0f, loadingPaint)
         }
 
         canvas.drawText(buttonText, widthSize / 2f, heightSize / 1.7f, paint)
@@ -96,12 +111,13 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun animateColorChange() {
-        val colorFrom = resources.getColor(R.color.colorPrimary)
-        val colorTo = resources.getColor(R.color.colorPrimaryDark)
-        valueAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo)
-
-        valueAnimator.addUpdateListener { animator ->
-            setBackgroundColor(animator.animatedValue as Int)
+        valueAnimator = ValueAnimator.ofInt(0, 100).apply {
+            duration = 3000
+            interpolator = DecelerateInterpolator()
+            addUpdateListener { valueAnimator ->
+                loadingProgress = (valueAnimator.animatedValue as Int).toFloat()
+                invalidate()
+            }
         }
         valueAnimator.start()
     }

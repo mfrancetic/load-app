@@ -94,7 +94,7 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun drawLoadingProgress(canvas: Canvas) {
-        canvas.drawRect(0f, heightSize.toFloat(), widthSize.toFloat() * loadingProgress / 100,
+        canvas.drawRect(paddingLeft.toFloat(), heightSize.toFloat(), widthSize.toFloat() * loadingProgress / 100,
                 0f, loadingPaint)
     }
 

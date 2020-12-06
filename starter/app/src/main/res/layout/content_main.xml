@@ -15,39 +15,42 @@
         android:id="@+id/download_image"
         android:layout_width="0dp"
         android:layout_height="@dimen/download_image_height"
-        android:src="@mipmap/ic_launcher"
         android:background="@color/colorPrimaryDark"
         android:contentDescription="@string/download_image_content_description"
-        app:layout_constraintStart_toStartOf="parent"
+        android:src="@mipmap/ic_launcher"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
         android:id="@+id/download_radio_group"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/default_padding"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="@dimen/default_padding"
+        app:layout_constraintBottom_toTopOf="@id/custom_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/download_image">
 
         <RadioButton
             android:id="@+id/glide_radio_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_padding"
             android:text="@string/glide_radio_button" />
 
         <RadioButton
             android:id="@+id/loadapp_radio_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_padding"
             android:text="@string/loadapp_radio_button" />
 
         <RadioButton
             android:id="@+id/retrofit_radio_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_padding"
             android:text="@string/retrofit_radio_button" />
     </RadioGroup>
 
@@ -55,7 +58,6 @@
         android:id="@+id/custom_button"
         android:layout_width="0dp"
         android:layout_height="@dimen/loading_button_height"
-        android:layout_margin="@dimen/loading_button_margin"
         app:buttonBackgroundColor="@color/colorPrimary"
         app:buttonTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -66,7 +68,7 @@
         android:id="@+id/loading_indicator"
         android:layout_width="@dimen/loading_indicator_size"
         android:layout_height="@dimen/loading_indicator_size"
-        android:layout_marginEnd="@dimen/default_padding"
+        android:layout_marginHorizontal="@dimen/default_padding"
         app:layout_constraintBottom_toBottomOf="@id/custom_button"
         app:layout_constraintEnd_toEndOf="@id/custom_button"
         app:layout_constraintTop_toTopOf="@id/custom_button"

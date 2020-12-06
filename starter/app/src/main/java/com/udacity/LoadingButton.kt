@@ -38,15 +38,8 @@ class LoadingButton @JvmOverloads constructor(
 
     private var loadingCircleFrame = RectF()
     private var currentSweepAngle = 0
-    private var loadingCircles = emptyList<LoadingCircle>()
 
-    private var colors: List<Int> = emptyList()
-        set(value) {
-            if (field != value || loadingCircles.isEmpty()) {
-                field = value
-                computeLoadingCircle()
-            }
-        }
+    private val loadingCircle = LoadingCircle(start = 0f, sweep = SWEEP_SIZE, color = Color.YELLOW)
 
     private var buttonState: ButtonState by Delegates.observable(ButtonState.Completed)
     { _, _, new ->
@@ -65,7 +58,6 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun completeAnimations() {
-        loadingCircles = emptyList()
         loadingCircleAnimator.end()
         valueAnimator.end()
     }
@@ -98,8 +90,6 @@ class LoadingButton @JvmOverloads constructor(
         isClickable = true
         buttonState = ButtonState.Clicked
 
-        computeLoadingCircle()
-
         context.withStyledAttributes(attrs, R.styleable.LoadingButton) {
             buttonClickedText = getInt(R.styleable.LoadingButton_buttonClickedText, 0)
             buttonLoadingText = getInt(R.styleable.LoadingButton_buttonLoadingText, 0)
@@ -107,18 +97,6 @@ class LoadingButton @JvmOverloads constructor(
             buttonTextColor = getInt(R.styleable.LoadingButton_buttonTextColor, context.getColor(R.color.white))
             buttonBackgroundColor = getInt(R.styleable.LoadingButton_buttonBackgroundColor, context.getColor(R.color.colorPrimary))
         }
-    }
-
-    private fun computeLoadingCircle() {
-        loadingCircles = if (colors.isEmpty()) {
-            listOf(LoadingCircle(0f, SWEEP_SIZE, android.R.color.darker_gray))
-        } else {
-            colors.mapIndexed { index, _ ->
-                val startAngle = index * SWEEP_SIZE
-                LoadingCircle(start = startAngle, sweep = SWEEP_SIZE, color = Color.YELLOW)
-            }
-        }
-        animateLoadingCircle()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -145,23 +123,21 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun drawLoadingCircle(canvas: Canvas) {
-        loadingCircles.forEach { circle ->
-            if (currentSweepAngle > circle.start + circle.sweep) {
-                loadingCirclePaint.color = circle.color
+        if (currentSweepAngle > loadingCircle.start + loadingCircle.sweep) {
+            loadingCirclePaint.color = loadingCircle.color
+            canvas.drawArc(loadingCircleFrame,
+                    START_ANGLE + loadingCircle.start,
+                    loadingCircle.sweep,
+                    true,
+                    loadingCirclePaint)
+        } else {
+            if (currentSweepAngle > loadingCircle.start) {
+                loadingCirclePaint.color = loadingCircle.color
                 canvas.drawArc(loadingCircleFrame,
-                        START_ANGLE + circle.start,
-                        circle.sweep,
+                        START_ANGLE,
+                        currentSweepAngle - loadingCircle.start,
                         true,
                         loadingCirclePaint)
-            } else {
-                if (currentSweepAngle > circle.start) {
-                    loadingCirclePaint.color = circle.color
-                    canvas.drawArc(loadingCircleFrame,
-                            START_ANGLE,
-                            currentSweepAngle - circle.start,
-                            true,
-                            loadingCirclePaint)
-                }
             }
         }
     }
@@ -216,8 +192,6 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun animateLoadingCircle() {
-        colors = listOf(Color.YELLOW)
-
         loadingCircleAnimator.cancel()
         loadingCircleAnimator = ValueAnimator.ofInt(0, SWEEP_SIZE.toInt()).apply {
             repeatMode = ValueAnimator.RESTART

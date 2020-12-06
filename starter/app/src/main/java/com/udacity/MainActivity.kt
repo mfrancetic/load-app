@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             var status = DownloadStatus.FAILURE
 
             if (isDownloadCompleted(intent)) {
-                status = getDownloadStatus()
+                status = getDownloadStatus(intent)
             }
             setButtonState(ButtonState.Completed)
             sendNotification(getFileName(), status.status)
@@ -67,11 +67,11 @@ class MainActivity : AppCompatActivity() {
         return id == downloadID && intent.action == DownloadManager.ACTION_DOWNLOAD_COMPLETE
     }
 
-    private fun getDownloadStatus(): DownloadStatus {
-        val status = DownloadStatus.FAILURE
+    private fun getDownloadStatus(intent: Intent?): DownloadStatus {
+        var status = DownloadStatus.FAILURE
         val query = DownloadManager.Query()
 
-        query.setFilterById(intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0))
+        intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0)?.let { query.setFilterById(it) }
 
         val manager = context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         val cursor: Cursor = manager.query(query)
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 val statusInt: Int =
                         cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
                 if (statusInt == DownloadManager.STATUS_SUCCESSFUL) {
-                    return DownloadStatus.SUCCESS
+                    status = DownloadStatus.SUCCESS
                 }
             }
         }

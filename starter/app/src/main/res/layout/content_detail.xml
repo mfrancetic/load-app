@@ -46,6 +46,7 @@
         android:id="@+id/ok_button"
         style="@style/WideButtonStyle"
         android:text="@string/ok"
+        android:contentDescription="@string/ok_button_content_description_return_to_main_activity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -12,6 +12,8 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 
 private const val START_ANGLE = 30f
+private const val SWEEP_SIZE = 360f
+private const val ANIMATION_DURATION = 2000
 
 private class Arc(val start: Float, val sweep: Float, val color: Int)
 
@@ -44,12 +46,11 @@ class LoadingIndicator @JvmOverloads constructor(
 
     private fun computeArcs() {
         arcs = if (colors.isEmpty()) {
-            listOf(Arc(0f, 360f, android.R.color.darker_gray))
+            listOf(Arc(0f, SWEEP_SIZE, android.R.color.darker_gray))
         } else {
-            val sweepSize = 360f
             colors.mapIndexed { index, _ ->
-                val startAngle = index * sweepSize
-                Arc(start = startAngle, sweep = sweepSize, color = Color.YELLOW)
+                val startAngle = index * SWEEP_SIZE
+                Arc(start = startAngle, sweep = SWEEP_SIZE, color = Color.YELLOW)
             }
         }
         startAnimation()
@@ -68,10 +69,10 @@ class LoadingIndicator @JvmOverloads constructor(
 
     private fun startAnimation() {
         animator?.cancel()
-        animator = ValueAnimator.ofInt(0, 360).apply {
+        animator = ValueAnimator.ofInt(0, SWEEP_SIZE.toInt()).apply {
             repeatMode = ValueAnimator.RESTART
             repeatCount = INFINITE
-            duration = 2000
+            duration = ANIMATION_DURATION.toLong()
             interpolator = LinearInterpolator()
             addUpdateListener { valueAnimator ->
                 currentSweepAngle = valueAnimator.animatedValue as Int

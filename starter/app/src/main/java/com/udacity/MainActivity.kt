@@ -16,6 +16,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.udacity.utils.CHANNEL_ID
+import com.udacity.utils.CHANNEL_NAME
+import com.udacity.utils.DownloadStatus
+import com.udacity.utils.sendNotification
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -30,15 +34,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        context = custom_button.context
+
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+        createNotificationChannel()
 
         custom_button.setOnClickListener {
             setButtonState(ButtonState.Loading)
             download()
         }
-        context = custom_button.context
-
-        createChannel()
     }
 
     private fun setLoadingIndicatorVisibilityAndColor(visible: Boolean) {
@@ -59,26 +63,40 @@ class MainActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             setLoadingIndicatorVisibilityAndColor(false)
 
-            val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             var status = DownloadStatus.FAILURE
-            if (id == downloadID && intent.action == DownloadManager.ACTION_DOWNLOAD_COMPLETE) {
-                val query = DownloadManager.Query()
-                query.setFilterById(intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0))
-                val manager = context!!.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
-                val cursor: Cursor = manager.query(query)
-                if (cursor.moveToFirst()) {
-                    if (cursor.count > 0) {
-                        val statusInt: Int =
-                                cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-                        if (statusInt == DownloadManager.STATUS_SUCCESSFUL) {
-                            status = DownloadStatus.SUCCESS
-                        }
-                    }
-                }
+
+            if (isDownloadCompleted(intent)) {
+                status = getDownloadStatus()
             }
             setButtonState(ButtonState.Completed)
             sendNotification(getFileName(), status.status)
         }
+    }
+
+    private fun isDownloadCompleted(intent: Intent?): Boolean {
+        val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+        return id == downloadID && intent.action == DownloadManager.ACTION_DOWNLOAD_COMPLETE
+    }
+
+    private fun getDownloadStatus(): DownloadStatus {
+        val status = DownloadStatus.FAILURE
+        val query = DownloadManager.Query()
+
+        query.setFilterById(intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0))
+
+        val manager = context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        val cursor: Cursor = manager.query(query)
+
+        if (cursor.moveToFirst()) {
+            if (cursor.count > 0) {
+                val statusInt: Int =
+                        cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                if (statusInt == DownloadManager.STATUS_SUCCESSFUL) {
+                    return DownloadStatus.SUCCESS
+                }
+            }
+        }
+        return status
     }
 
     private fun sendNotification(fileName: String, status: String) {
@@ -109,8 +127,7 @@ class MainActivity : AppCompatActivity() {
                         .setAllowedOverRoaming(true)
 
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
-        downloadID =
-                downloadManager.enqueue(request)// enqueue puts the download request in the queue.
+        downloadID = downloadManager.enqueue(request)
     }
 
     private fun getUrl(): String {
@@ -131,8 +148,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createChannel() {
-        // Channels are available from api level 26.
+    private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                     CHANNEL_ID,
@@ -141,7 +157,7 @@ class MainActivity : AppCompatActivity() {
             )
 
             notificationChannel.enableLights(true)
-            notificationChannel.lightColor = resources.getColor(R.color.colorPrimary)
+            notificationChannel.lightColor = getColor(R.color.colorPrimary)
             notificationChannel.enableVibration(false)
             notificationChannel.description = getString(R.string.download_complete)
 

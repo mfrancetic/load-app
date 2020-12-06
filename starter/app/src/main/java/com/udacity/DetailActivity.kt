@@ -3,6 +3,9 @@ package com.udacity
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.udacity.utils.FILE_NAME
+import com.udacity.utils.STATUS
+import com.udacity.utils.cancelAllNotifications
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.content_detail.*
 

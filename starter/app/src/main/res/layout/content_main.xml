@@ -64,14 +64,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.udacity.LoadingIndicator
-        android:id="@+id/loading_indicator"
-        android:layout_width="@dimen/loading_indicator_size"
-        android:layout_height="@dimen/loading_indicator_size"
-        android:layout_marginHorizontal="@dimen/default_padding"
-        app:layout_constraintBottom_toBottomOf="@id/custom_button"
-        app:layout_constraintEnd_toEndOf="@id/custom_button"
-        app:layout_constraintTop_toTopOf="@id/custom_button"
-        tools:background="@color/colorPrimary" />
-
 </androidx.constraintlayout.motion.widget.MotionLayout>

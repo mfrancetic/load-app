@@ -52,7 +52,6 @@ class LoadingButton @JvmOverloads constructor(
     { _, _, new ->
         when (new) {
             ButtonState.Loading -> {
-                colors = listOf(Color.YELLOW)
                 animateColorChange()
                 animateLoadingCircle()
                 invalidate()
@@ -66,10 +65,9 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun completeAnimations() {
-        loadingCircleAnimator.end()
         loadingCircles = emptyList()
+        loadingCircleAnimator.end()
         valueAnimator.end()
-        loadingCircleAnimator.cancel()
     }
 
     fun setNewButtonState(newButtonState: ButtonState) {
@@ -147,20 +145,20 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun drawLoadingCircle(canvas: Canvas) {
-        loadingCircles.forEach { arc ->
-            if (currentSweepAngle > arc.start + arc.sweep) {
-                loadingCirclePaint.color = arc.color
+        loadingCircles.forEach { circle ->
+            if (currentSweepAngle > circle.start + circle.sweep) {
+                loadingCirclePaint.color = circle.color
                 canvas.drawArc(loadingCircleFrame,
-                        START_ANGLE + arc.start,
-                        arc.sweep,
+                        START_ANGLE + circle.start,
+                        circle.sweep,
                         true,
                         loadingCirclePaint)
             } else {
-                if (currentSweepAngle > arc.start) {
-                    loadingCirclePaint.color = arc.color
+                if (currentSweepAngle > circle.start) {
+                    loadingCirclePaint.color = circle.color
                     canvas.drawArc(loadingCircleFrame,
                             START_ANGLE,
-                            currentSweepAngle - arc.start,
+                            currentSweepAngle - circle.start,
                             true,
                             loadingCirclePaint)
                 }
@@ -218,6 +216,8 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun animateLoadingCircle() {
+        colors = listOf(Color.YELLOW)
+
         loadingCircleAnimator.cancel()
         loadingCircleAnimator = ValueAnimator.ofInt(0, SWEEP_SIZE.toInt()).apply {
             repeatMode = ValueAnimator.RESTART

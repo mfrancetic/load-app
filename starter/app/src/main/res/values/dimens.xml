@@ -6,4 +6,5 @@
     <dimen name="loading_button_height">60dp</dimen>
     <dimen name="loading_button_margin">20dp</dimen>
     <dimen name="slide_in_animation_duration">1500</dimen>
+    <dimen name="download_image_height">200dp</dimen>
 </resources>

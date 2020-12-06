@@ -24,4 +24,5 @@
     <string name="ok">OK</string>
     <string name="success">Success</string>
     <string name="fab_content_description_return_to_main_activity">Return to the MainActivity</string>
+    <string name="download_image_content_description">Download image</string>
 </resources>

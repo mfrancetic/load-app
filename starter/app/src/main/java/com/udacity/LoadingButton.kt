@@ -12,7 +12,7 @@ import androidx.core.content.withStyledAttributes
 import kotlin.properties.Delegates
 
 private const val TEXT_SIZE = 55.0f
-private const val ANIMATION_DURATION = 3000L
+const val ANIMATION_DURATION = 3000L
 private const val START_ANGLE = 30f
 private const val SWEEP_SIZE = 360f
 private const val LOADING_CIRCLE_SIZE = 80
@@ -40,7 +40,7 @@ class LoadingButton @JvmOverloads constructor(
     private var currentSweepAngle = 0
     private var loadingCircles = emptyList<LoadingCircle>()
 
-    var colors: List<Int> = emptyList()
+    private var colors: List<Int> = emptyList()
         set(value) {
             if (field != value || loadingCircles.isEmpty()) {
                 field = value

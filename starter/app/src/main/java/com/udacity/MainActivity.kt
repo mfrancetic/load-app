@@ -8,11 +8,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.Cursor
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.View
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -99,8 +99,10 @@ class MainActivity : AppCompatActivity() {
     private fun download() {
         val url = getUrl()
         if (url.isEmpty()) {
-            Toast.makeText(this, getString(R.string.select_file_for_download), Toast.LENGTH_LONG)
-                    .show()
+            displayToast()
+            Handler(Looper.getMainLooper()).postDelayed({
+                setButtonState(ButtonState.Completed)
+            }, ANIMATION_DURATION)
             return
         }
 
@@ -114,6 +116,10 @@ class MainActivity : AppCompatActivity() {
 
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         downloadID = downloadManager.enqueue(request)
+    }
+
+    private fun displayToast() {
+        Toast.makeText(this, getString(R.string.select_file_for_download), Toast.LENGTH_LONG).show()
     }
 
     private fun getUrl(): String {

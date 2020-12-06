@@ -13,8 +13,8 @@
         <Constraint
             android:id="@+id/custom_button"
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_margin="20dp"
+            android:layout_height="@dimen/loading_button_height"
+            android:layout_margin="@dimen/loading_button_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="parent" />
     </ConstraintSet>
@@ -31,8 +31,8 @@
         <Constraint
             android:id="@+id/custom_button"
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_margin="20dp"
+            android:layout_height="@dimen/loading_button_height"
+            android:layout_margin="@dimen/loading_button_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -44,29 +44,3 @@
         app:constraintSetStart="@+id/start"
         app:duration="1500" />
 </MotionScene>
-
-
-    <!--<RadioGroup-->
-    <!--&gt;-->
-
-    <!--<RadioButton-->
-    <!--    android:id="@+id/glide_radio_button"-->
-    <!--    android:layout_width="wrap_content"-->
-    <!--    android:layout_height="wrap_content"-->
-    <!--    android:text="@string/glide_radio_button" />-->
-
-    <!--<RadioButton-->
-    <!--    android:id="@+id/loadapp_radio_button"-->
-    <!--    android:layout_width="wrap_content"-->
-    <!--    android:layout_height="wrap_content"-->
-    <!--    android:text="@string/loadapp_radio_button" />-->
-
-    <!--<RadioButton-->
-    <!--    android:id="@+id/retrofit_radio_button"-->
-    <!--    android:layout_width="wrap_content"-->
-    <!--    android:layout_height="wrap_content"-->
-    <!--    android:text="@string/retrofit_radio_button" />-->
-    <!--</RadioGroup>-->
-
-    <!--<com.udacity.LoadingButton-->
-    <!--/>-->

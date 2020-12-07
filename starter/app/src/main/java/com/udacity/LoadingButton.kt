@@ -11,17 +11,19 @@ import android.view.animation.LinearInterpolator
 import androidx.core.content.withStyledAttributes
 import kotlin.properties.Delegates
 
-private const val TEXT_SIZE = 55.0f
-const val ANIMATION_DURATION = 3000L
-private const val START_ANGLE = 30f
-private const val SWEEP_SIZE = 360f
-private const val LOADING_CIRCLE_SIZE = 80
-
 private class LoadingCircle(val start: Float, val sweep: Float, val color: Int)
 
 class LoadingButton @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
+
+    companion object {
+        private const val START_ANGLE = 30f
+        private const val SWEEP_SIZE = 360f
+        private const val LOADING_CIRCLE_SIZE = 80
+        private const val TEXT_SIZE = 55.0f
+        const val ANIMATION_DURATION = 3000L
+    }
 
     private var widthSize = 0
     private var heightSize = 0
@@ -88,7 +90,6 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     init {
-        isClickable = true
         buttonState = ButtonState.Clicked
 
         context.withStyledAttributes(attrs, R.styleable.LoadingButton) {

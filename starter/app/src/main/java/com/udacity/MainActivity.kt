@@ -16,6 +16,7 @@ import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.udacity.LoadingButton.Companion.ANIMATION_DURATION
 import com.udacity.utils.CHANNEL_ID
 import com.udacity.utils.CHANNEL_NAME
 import com.udacity.utils.DownloadStatus
@@ -158,5 +159,10 @@ class MainActivity : AppCompatActivity() {
             )
             notificationManager.createNotificationChannel(notificationChannel)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receiver)
     }
 }

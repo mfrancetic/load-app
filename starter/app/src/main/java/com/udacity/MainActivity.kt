@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
         createNotificationChannel()
 
         custom_button.setOnClickListener {
-            setButtonState(ButtonState.Loading)
             download()
         }
     }
@@ -101,11 +100,10 @@ class MainActivity : AppCompatActivity() {
         val url = getUrl()
         if (url.isEmpty()) {
             displayToast()
-            Handler(Looper.getMainLooper()).postDelayed({
-                setButtonState(ButtonState.Completed)
-            }, ANIMATION_DURATION)
             return
         }
+
+        setButtonState(ButtonState.Loading)
 
         val request =
                 DownloadManager.Request(Uri.parse(url))
@@ -120,7 +118,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayToast() {
-        Toast.makeText(this, getString(R.string.select_file_for_download), Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.select_file_for_download), Toast.LENGTH_SHORT).show()
     }
 
     private fun getUrl(): String {

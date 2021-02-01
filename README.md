@@ -11,13 +11,14 @@ A notification will be sent once the download is complete. When a user clicks on
 
 [The final look of the app](https://gph.is/g/Zywmnre)
 
+## App Screenshots
+
+<img src="https://user-images.githubusercontent.com/33599053/106516561-82cab100-64d7-11eb-8ba1-cb5dd7b70135.png" width=30% height=30%> 
+<img src="https://user-images.githubusercontent.com/33599053/106516564-84947480-64d7-11eb-8964-80e6cb9fa64e.png" width=30% height=30%> 
+<img src="https://user-images.githubusercontent.com/33599053/106516568-85c5a180-64d7-11eb-94c9-b123d8cc3fa6.png" width=30% height=30%> 
+<img src="https://user-images.githubusercontent.com/33599053/106516570-86f6ce80-64d7-11eb-8b0f-19c841018ba6.png" width=30% height=30%> 
 
 ## Built With
 
 * [Android Studio](https://developer.android.com/studio) - Default IDE used to build android apps
 * [Kotlin](https://kotlinlang.org/) - Default language used to build this project
-
-Include all items used to build project.
-
-## License
-Please review the following [license agreement](https://bumptech.github.io/glide/dev/open-source-licenses.html)
